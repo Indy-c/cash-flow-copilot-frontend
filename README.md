@@ -46,6 +46,7 @@ GET    /api/transactions
 GET    /api/transactions/summary
 GET    /api/transactions/categories
 GET    /api/transactions/monthly-cash-flow
+GET    /api/transactions/insights
 POST   /api/transactions/upload
 DELETE /api/transactions
 ```

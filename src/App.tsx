@@ -30,6 +30,12 @@ type MonthlyCashFlowItem = {
   net_cash_flow: string;
 };
 
+type InsightItem = {
+  title: string;
+  message: string;
+  level: "positive" | "warning" | "neutral";
+};
+
 const emptySummary: TransactionSummary = {
   total_income: "0",
   total_expenses: "0",
@@ -48,6 +54,7 @@ function App() {
   const [monthlyCashFlow, setMonthlyCashFlow] = useState<MonthlyCashFlowItem[]>(
     [],
   );
+  const [insights, setInsights] = useState<InsightItem[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [message, setMessage] = useState<string>("");
   const largestCategoryTotal = Math.max(
@@ -99,16 +106,29 @@ function App() {
       });
   }, []);
 
+  const fetchInsights = useCallback(() => {
+    axios
+      .get("http://localhost:8000/api/transactions/insights")
+      .then((res) => {
+        setInsights(res.data);
+      })
+      .catch(() => {
+        setMessage("Could not load transaction insights.");
+      });
+  }, []);
+
   const refreshDashboard = useCallback(() => {
     fetchTransactions();
     fetchSummary();
     fetchCategoryBreakdown();
     fetchMonthlyCashFlow();
+    fetchInsights();
   }, [
     fetchSummary,
     fetchTransactions,
     fetchCategoryBreakdown,
     fetchMonthlyCashFlow,
+    fetchInsights,
   ]);
 
   useEffect(() => {
@@ -193,6 +213,26 @@ function App() {
           <span>Transactions</span>
           <strong>{summary.transaction_count}</strong>
         </div>
+      </section>
+
+      <section className="table-panel">
+        <h2>Insights</h2>
+
+        {insights.length === 0 ? (
+          <p className="empty-state">No insights yet.</p>
+        ) : (
+          <div className="insight-list">
+            {insights.map((insight) => (
+              <div
+                className={`insight-card ${insight.level}`}
+                key={insight.title}
+              >
+                <strong>{insight.title}</strong>
+                <p>{insight.message}</p>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
 
       <section className="table-panel">
