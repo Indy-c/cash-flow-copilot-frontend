@@ -65,6 +65,64 @@ button:hover {
   gap: 12px;
 }
 
+.empty-state,
+.empty-table {
+  color: #64748b;
+  font-size: 15px;
+}
+
+.empty-table {
+  padding: 24px 12px;
+  text-align: center;
+}
+
+.category-list {
+  display: grid;
+  gap: 22px;
+}
+
+.category-row {
+  display: grid;
+  gap: 10px;
+  max-width: 760px;
+}
+
+.category-info {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.category-info strong {
+  min-width: 90px;
+  text-align: right;
+}
+
+.category-bar {
+  background: #e2e8f0;
+  border-radius: 999px;
+  height: 8px;
+  overflow: hidden;
+}
+
+.category-bar-fill {
+  background: #2563eb;
+  height: 100%;
+}
+
+.category-row:last-child {
+  border-bottom: 0;
+}
+
+.category-row span {
+  color: #334155;
+}
+
+.category-row strong {
+  color: #0f172a;
+  font-size: 18px;
+}
+
 .summary-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
