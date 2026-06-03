@@ -23,6 +23,13 @@ type CategoryBreakdownItem = {
   total: string;
 };
 
+type MonthlyCashFlowItem = {
+  month: string; // Format: "YYYY-MM"
+  income: string;
+  expenses: string;
+  net_cash_flow: string;
+};
+
 const emptySummary: TransactionSummary = {
   total_income: "0",
   total_expenses: "0",
@@ -38,6 +45,9 @@ function App() {
   const [categoryBreakdown, setCategoryBreakdown] = useState<
     CategoryBreakdownItem[]
   >([]);
+  const [monthlyCashFlow, setMonthlyCashFlow] = useState<MonthlyCashFlowItem[]>(
+    [],
+  );
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [message, setMessage] = useState<string>("");
   const largestCategoryTotal = Math.max(
@@ -78,11 +88,28 @@ function App() {
       });
   }, []);
 
+  const fetchMonthlyCashFlow = useCallback(() => {
+    axios
+      .get("http://localhost:8000/api/transactions/monthly-cash-flow")
+      .then((res) => {
+        setMonthlyCashFlow(res.data);
+      })
+      .catch(() => {
+        setMessage("Could not load monthly cash flow.");
+      });
+  }, []);
+
   const refreshDashboard = useCallback(() => {
     fetchTransactions();
     fetchSummary();
     fetchCategoryBreakdown();
-  }, [fetchSummary, fetchTransactions, fetchCategoryBreakdown]);
+    fetchMonthlyCashFlow();
+  }, [
+    fetchSummary,
+    fetchTransactions,
+    fetchCategoryBreakdown,
+    fetchMonthlyCashFlow,
+  ]);
 
   useEffect(() => {
     refreshDashboard();
@@ -166,6 +193,38 @@ function App() {
           <span>Transactions</span>
           <strong>{summary.transaction_count}</strong>
         </div>
+      </section>
+
+      <section className="table-panel">
+        <h2>Monthly Cash Flow</h2>
+
+        {monthlyCashFlow.length === 0 ? (
+          <p className="empty-state">No monthly cash flow data yet.</p>
+        ) : (
+          <div className="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Month</th>
+                  <th>Income</th>
+                  <th>Expenses</th>
+                  <th>Net Cash Flow</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {monthlyCashFlow.map((item) => (
+                  <tr key={item.month}>
+                    <td>{item.month}</td>
+                    <td>{formatMoney(item.income)}</td>
+                    <td>{formatMoney(item.expenses)}</td>
+                    <td>{formatMoney(item.net_cash_flow)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </section>
 
       <section className="table-panel">

@@ -45,6 +45,7 @@ This frontend works with the Cash Flow Copilot backend API:
 GET    /api/transactions
 GET    /api/transactions/summary
 GET    /api/transactions/categories
+GET    /api/transactions/monthly-cash-flow
 POST   /api/transactions/upload
 DELETE /api/transactions
 ```
