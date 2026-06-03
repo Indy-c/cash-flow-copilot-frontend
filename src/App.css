@@ -2,22 +2,28 @@
   min-height: 100vh;
 }
 
-body {
-  margin: 0;
-  background: #f6f8fb;
-  color: #172033;
-  font-family: Arial, sans-serif;
-}
-
 main {
   max-width: 1100px;
   margin: 0 auto;
   padding: 32px;
 }
 
+h1 {
+  color: #152033;
+  font-size: 56px;
+  line-height: 1;
+  margin-bottom: 36px;
+}
+
 h1,
 h2 {
   margin-top: 0;
+}
+
+h2 {
+  color: #0f172a;
+  font-size: 28px;
+  margin-bottom: 20px;
 }
 
 button {
@@ -52,6 +58,13 @@ button:hover {
   margin-bottom: 24px;
 }
 
+.upload-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
 .summary-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -84,6 +97,10 @@ button:hover {
   padding: 24px;
 }
 
+.table-wrapper {
+  overflow-x: auto;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -104,4 +121,24 @@ th {
 .message {
   color: #475569;
   margin-top: 12px;
+}
+
+@media (max-width: 760px) {
+  main {
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 40px;
+  }
+
+  .summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 520px) {
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
 }

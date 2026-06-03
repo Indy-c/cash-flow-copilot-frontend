@@ -16,6 +16,7 @@ function App() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [message, setMessage] = useState<string>("");
 
+  // Dashboard totals are derived from the transaction list returned by the API.
   const totalIncome = transactions
     .filter((transaction) => Number(transaction.amount) > 0)
     .reduce((sum, transaction) => sum + Number(transaction.amount), 0);
@@ -81,22 +82,24 @@ function App() {
     <main>
       <h1>Cash Flow Copilot</h1>
 
-      <section>
+      <section className="upload-panel">
         <h2>Upload Transactions</h2>
-        <input
-          type="file"
-          accept=".csv"
-          onChange={(event) => {
-            const file = event.target.files?.[0] || null;
-            setSelectedFile(file);
-          }}
-        />
+        <div className="upload-actions">
+          <input
+            type="file"
+            accept=".csv"
+            onChange={(event) => {
+              const file = event.target.files?.[0] || null;
+              setSelectedFile(file);
+            }}
+          />
 
-        <button onClick={uploadFile}>Upload CSV</button>
-        <button onClick={resetTransactions} className="secondary-button">
-          Reset Transactions
-        </button>
-        <p>{message}</p>
+          <button onClick={uploadFile}>Upload CSV</button>
+          <button onClick={resetTransactions} className="secondary-button">
+            Reset Transactions
+          </button>
+        </div>
+        {message && <p className="message">{message}</p>}
       </section>
 
       <section className="summary-grid">
@@ -121,29 +124,31 @@ function App() {
         </div>
       </section>
 
-      <section>
+      <section className="table-panel">
         <h2>Transactions</h2>
 
-        <table border={1} cellPadding={8}>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Description</th>
-              <th>Amount</th>
-              <th>Category</th>
-            </tr>
-          </thead>
-          <tbody>
-            {transactions.map((transaction) => (
-              <tr key={transaction.id}>
-                <td>{transaction.date || "No date"}</td>
-                <td>{transaction.description}</td>
-                <td>{transaction.amount}</td>
-                <td>{transaction.category || "Uncategorized"}</td>
+        <div className="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Category</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {transactions.map((transaction) => (
+                <tr key={transaction.id}>
+                  <td>{transaction.date || "No date"}</td>
+                  <td>{transaction.description}</td>
+                  <td>{transaction.amount}</td>
+                  <td>{transaction.category || "Uncategorized"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </section>
     </main>
   );
